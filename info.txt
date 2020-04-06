@@ -1,3 +1,7 @@
 Testowanie i Niezawodność project
 SRAM memory - test stand
 
+03.2020 - 06.2020?
+
+128 X 8 bit CMOS SRAM AS6C1008
+https://www.tme.eu/Document/09fe96c7f3b090cdc0b23ae42768bc92/AS6C1008.pdf
