@@ -25,12 +25,15 @@ public:
 
     void addToLogs(QString message);
 
+    void setUartPowerText(QString text, QColor color=QColor(255,0,0));
+    void setMemoryPowerText(QString text, QColor color=QColor(255,0,0));
+    void setLastOperationText(QString text, QColor color=QColor(0,0,0));
+
 private slots:
     //Uart Connection tab
     void on_pushButtonSearch_clicked();
     void on_pushButtonConnect_clicked();
     void on_pushButtonDisconnect_clicked();
-
 
     //Basic testing tab
     void on_pushButtonPower_clicked();
@@ -44,16 +47,18 @@ private slots:
     void on_pushButtonRead_clicked();
 
 
-
-
-
-
 private:
     Ui::MainWindow *ui;
     QSerialPort *uartDevice;
     MySerialReader *serialReader;
     QThread *readingThread;
 
+    bool uartStatus;
+    bool memoryPower;
+    QString memoryStatus;
+    QByteArray *savedAddress;
+
+    void guiInitialize();
     void testStandInit();
 };
 #endif // MAINWINDOW_H

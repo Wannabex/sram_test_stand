@@ -112,6 +112,9 @@
     </property>
    </widget>
    <widget class="QGroupBox" name="groupBoxBasic">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -186,6 +189,9 @@
     </layout>
    </widget>
    <widget class="QGroupBox" name="groupBoxAdvanced">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -203,15 +209,25 @@
      <string>                                     Advanced testing</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="12" column="2">
-      <widget class="QCheckBox" name="checkBoxTime">
+     <item row="12" column="0">
+      <widget class="QLabel" name="labelOptions">
        <property name="font">
         <font>
          <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Measure time</string>
+        <string>Additional options:</string>
+       </property>
+       <property name="buddy">
+        <cstring></cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QSpinBox" name="spinBoxAddress">
+       <property name="maximum">
+        <number>131072</number>
        </property>
       </widget>
      </item>
@@ -233,6 +249,91 @@
        </property>
       </spacer>
      </item>
+     <item row="4" column="2">
+      <widget class="QPushButton" name="pushButtonAddress">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Set address</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QPushButton" name="pushButtonWrite">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Write</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="labelAddress">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Read/Write address:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelStatus">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Memory status select</string>
+       </property>
+       <property name="buddy">
+        <cstring>comboBoxStatus</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="2">
+      <widget class="QPushButton" name="pushButtonRead">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Read</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="spinBoxWriteValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="labelRead">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Number of bytes to read:</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QPushButton" name="pushButtonStatus">
        <property name="font">
@@ -252,47 +353,11 @@
          <pointsize>9</pointsize>
         </font>
        </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="labelOptions">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
+       <property name="currentText">
+        <string/>
        </property>
-       <property name="text">
-        <string>Additional options:</string>
-       </property>
-       <property name="buddy">
-        <cstring></cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelStatus">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Memory status select</string>
-       </property>
-       <property name="buddy">
-        <cstring>comboBoxStatus</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
-      <widget class="QPushButton" name="pushButtonWrite">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Write</string>
+       <property name="minimumContentsLength">
+        <number>0</number>
        </property>
       </widget>
      </item>
@@ -305,9 +370,6 @@
        </property>
        <property name="text">
         <string>Value to write:</string>
-       </property>
-       <property name="buddy">
-        <cstring>lineEditWrite</cstring>
        </property>
       </widget>
      </item>
@@ -323,68 +385,24 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="2">
-      <widget class="QPushButton" name="pushButtonRead">
+     <item row="12" column="2">
+      <widget class="QCheckBox" name="checkBoxTime">
        <property name="font">
         <font>
          <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Read</string>
+        <string>Measure time</string>
        </property>
       </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QLabel" name="labelRead">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Number of bytes to read:</string>
-       </property>
-       <property name="buddy">
-        <cstring>lineEditRead</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="labelAddress">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Read/Write address:</string>
-       </property>
-       <property name="buddy">
-        <cstring>lineEditAddress</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QPushButton" name="pushButtonAddress">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Set address</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="lineEditAddress"/>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="lineEditWrite"/>
      </item>
      <item row="9" column="1">
-      <widget class="QLineEdit" name="lineEditRead"/>
+      <widget class="QSpinBox" name="spinBoxNumberToRead">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -432,7 +450,7 @@
         <string>Memory status:</string>
        </property>
        <property name="buddy">
-        <cstring>textBrowserStatus</cstring>
+        <cstring>textBrowserMemoryStatus</cstring>
        </property>
       </widget>
      </item>
@@ -461,7 +479,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QTextBrowser" name="textBrowserStatus">
+      <widget class="QTextBrowser" name="textBrowserMemoryStatus">
        <property name="font">
         <font>
          <pointsize>9</pointsize>
