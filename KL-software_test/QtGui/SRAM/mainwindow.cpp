@@ -87,6 +87,12 @@ void MainWindow::on_pushButtonConnect_clicked()
     this->uartDevice->setPortName(portName);
     this->testStandInit();
 
+    this->serialReader = new MySerialReader(this->uartDevice);
+    this->readingThread = new QThread;
+    this->serialReader->moveToThread(this->readingThread);
+    connect(readingThread, SIGNAL(started()), serialReader, SLOT(readFromPort()));
+    connect(serialReader, SIGNAL(dataToLogs(QString)), this, SLOT(dataFromReader(QString)));
+
     this->addToLogs("Connected with serial port");
 
     this->uartStatus = true;
@@ -94,6 +100,12 @@ void MainWindow::on_pushButtonConnect_clicked()
     ui->groupBoxBasic->setEnabled(true);
     ui->groupBoxAdvanced->setEnabled(true);
     ui->pushButtonDisconnect->setEnabled(true);
+}
+
+void MainWindow::dataFromReader(QString serialData)
+{
+    QString message = QString("Received bytes: " + serialData);
+    this->addToLogs(message);
 }
 
 void MainWindow::testStandInit()
@@ -145,6 +157,18 @@ void MainWindow::on_pushButtonDisconnect_clicked()
     ui->groupBoxAdvanced->setEnabled(false);
 }
 
+void MainWindow::sendMessageToDevice(QByteArray messageBytes)
+{
+    if(this->uartDevice->isOpen() && this->uartDevice->isWritable())
+    {
+        qDebug() << messageBytes;
+        this->uartDevice->write(messageBytes);
+    }
+    else
+    {
+        this->addToLogs("Can't send this message");
+    }
+}
 
 void MainWindow::on_pushButtonPower_clicked()
 {
@@ -169,12 +193,18 @@ void MainWindow::on_pushButtonPower_clicked()
 void MainWindow::on_pushButtonWriteFull_clicked()
 {
     qDebug() << "on_pushButtonWriteFull_clicked()";
+    unsigned char value = 0x05;
     this->setLastOperationText("Full memory write commanded");
 }
 
 void MainWindow::on_pushButtonReadFull_clicked()
-{
-    qDebug() << "on_pushButtonReadFull_clicked()";
+{  
+    unsigned char addressByteL = 0xff;
+    unsigned char addressByteM = 0xff;
+    unsigned char addressByteH = 0x01;
+    this->savedAddress->append(addressByteL);
+    this->savedAddress->append(addressByteM);
+    this->savedAddress->append(addressByteH);
     this->setLastOperationText("Full memory read commanded");
 }
 
@@ -182,38 +212,36 @@ void MainWindow::on_pushButtonReadFull_clicked()
 
 void MainWindow::on_pushButtonStatus_clicked()
 {
-   qDebug() << "on_pushButtonStatus_clicked()";
    this->memoryStatus = ui->comboBoxStatus->currentText();
-    qDebug() << this->memoryStatus;
+   qDebug() << this->memoryStatus;
    this->setLastOperationText("Memory status changed");
 }
 
 void MainWindow::on_pushButtonAddress_clicked()
 {
-    qDebug() << "on_pushButtonAddress_clicked()";
     int addressValue = ui->spinBoxAddress->value();
     unsigned char addressByteL = addressValue & 0xff;
-    unsigned char addressByteH = (addressValue >> 8) & 0xff;
+    unsigned char addressByteM = (addressValue >> 8) & 0xff;
+    unsigned char addressByteH = (addressValue >> 16) & 0xff;
 
-    qDebug() << QString::number(addressByteH) << QString::number(addressByteL);
+    qDebug() << QString::number(addressByteH) << QString::number(addressByteM) << QString::number(addressByteL);
     this->savedAddress->append(addressByteL);
+    this->savedAddress->append(addressByteM);
     this->savedAddress->append(addressByteH);
     this->setLastOperationText("Address to read/write set");
 }
 
 void MainWindow::on_pushButtonWrite_clicked()
-{
-    qDebug() << "on_pushButtonWrite_clicked()";
-
+{    
+    unsigned char writeValue = ui->spinBoxWriteValue->value();
+    qDebug() << QString::number(writeValue);
     this->setLastOperationText("Memory write commanded");
 }
 
 void MainWindow::on_pushButtonRead_clicked()
 {
-    qDebug() << "on_pushButtonRead_clicked()";
+    unsigned char numberToRead = ui->spinBoxNumberToRead->value();
+    qDebug() << QString::number(numberToRead);
     this->setLastOperationText("Memory read commanded");
 }
-
-
-
 

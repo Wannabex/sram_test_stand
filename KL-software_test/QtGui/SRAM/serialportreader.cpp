@@ -2,13 +2,11 @@
 #include "QDebug"
 #include "mainwindow.h"
 
-MySerialReader::MySerialReader(QSerialPort *device)
+MySerialReader::MySerialReader(QSerialPort *uartDevice)
 {
-    this->readPort = device;
+    this->readPort = uartDevice;
     this->running = true;
-    this->awaitingResponse = false;
-    this->SramFrameRead = new SramDataFrame();
-    this->commandSentAgain = false;
+    this->receivedFrame = new QByteArray();
 }
 
 void MySerialReader::readFromPort()
@@ -18,27 +16,40 @@ void MySerialReader::readFromPort()
         QByteArray dataBuffer = this->readPort->readAll();
         if (dataBuffer.size() > 0)
         {
-            //this->checkForZFrame(dataBuffer);
+            this->checkForFullFrame(dataBuffer);
         }
 
         while(this->readPort->waitForReadyRead(50))// && this->readPort->canReadLine())
         {
-            //QString readZwave = this->readPort->readAll();
-            //QString toLogs = this->readPort->readLine();
-
-
-
-
-            //QString toLogs = QString::fromStdString(dataBuffer.toStdString());
-            //emit dataToLogs(toLogs);
-            //qDebug() << readZwave;
-            //if (readZwave != "")
-            //{
-             //   emit dataToLogs(readZwave);
-            //}
         }
     }
 }
+
+void MySerialReader::checkForFullFrame(QByteArray dataRead)
+{
+    // \r == 0x0D \n == 0x0A
+    receivedFrame->append(dataRead);
+    int dataLength = receivedFrame->length();
+    if( (receivedFrame->at(dataLength - 2) == 0x0D) &&
+        (receivedFrame->at(dataLength - 1) == 0x0A) )
+    {
+        QString logsMessage = frameToString(*receivedFrame);
+        receivedFrame->clear();
+        emit dataToLogs(logsMessage);
+    }
+}
+
+QString MySerialReader::frameToString(QByteArray receivedBytes)
+{
+    QString bytesAsString;
+    QByteArray::iterator byteCounter;
+    for(byteCounter = receivedBytes.begin(); byteCounter != receivedBytes.end(); byteCounter++)
+    {
+        bytesAsString.append(*byteCounter);
+    }
+    return bytesAsString;
+}
+
 
 void MySerialReader::stopReader()
 {

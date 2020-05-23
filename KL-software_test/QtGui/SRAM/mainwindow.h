@@ -29,7 +29,10 @@ public:
     void setMemoryPowerText(QString text, QColor color=QColor(255,0,0));
     void setLastOperationText(QString text, QColor color=QColor(0,0,0));
 
+    void sendMessageToDevice(QByteArray messageBytes);
+
 private slots:
+    void dataFromReader(QString serialData);
     //Uart Connection tab
     void on_pushButtonSearch_clicked();
     void on_pushButtonConnect_clicked();
@@ -45,7 +48,6 @@ private slots:
     void on_pushButtonAddress_clicked();
     void on_pushButtonWrite_clicked();
     void on_pushButtonRead_clicked();
-
 
 private:
     Ui::MainWindow *ui;
