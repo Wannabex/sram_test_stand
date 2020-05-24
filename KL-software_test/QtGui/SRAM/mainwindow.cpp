@@ -18,6 +18,7 @@ MainWindow::~MainWindow()
 void MainWindow::guiInitialize()
 {
     this->uartDevice = new QSerialPort(this);
+    this->receivedFrameNumber = 0;
 
     ui->comboBoxStatus->insertItem(0, "Operational");
     ui->comboBoxStatus->insertItem(1, "Standby");
@@ -36,6 +37,12 @@ void MainWindow::addToLogs(QString message)
 {
     QString currentDateTime = QDateTime::currentDateTime().toString("yyyy.MM.dd.hh.mm.ss");
     ui->textEditLogs->append(currentDateTime + "\t" + message);
+}
+
+void MainWindow::addToFramesLog(QString frame)
+{
+    ui->textEditFrames->append("Frame number " + QString::number(receivedFrameNumber) + "\t" + frame);
+    this->receivedFrameNumber++;
 }
 
 void MainWindow::setUartPowerText(QString text, QColor color)
@@ -91,7 +98,7 @@ void MainWindow::on_pushButtonConnect_clicked()
     this->readingThread = new QThread;
     this->serialReader->moveToThread(this->readingThread);
     connect(readingThread, SIGNAL(started()), serialReader, SLOT(readFromPort()));
-    connect(serialReader, SIGNAL(dataToLogs(QString)), this, SLOT(dataFromReader(QString)));
+    connect(serialReader, SIGNAL(dataToLogs(QString, QString)), this, SLOT(dataFromReader(QString, QString)));
 
     this->addToLogs("Connected with serial port");
 
@@ -104,8 +111,9 @@ void MainWindow::on_pushButtonConnect_clicked()
 
 void MainWindow::dataFromReader(QString serialData)
 {
-    QString message = QString("Received bytes: " + serialData);
-    this->addToLogs(message);
+    QString logMessage = QString("Received data frame number " + QString::number(this->receivedFrameNumber));
+    this->addToLogs(logMessage);
+    this->addToFramesLog(serialData);
 }
 
 void MainWindow::testStandInit()
@@ -172,11 +180,10 @@ void MainWindow::sendMessageToDevice(QByteArray messageBytes)
 
 void MainWindow::on_pushButtonPower_clicked()
 {
-    qDebug() << "on_pushButtonPower_clicked()";
-
     if(!this->memoryPower)
     {
         // send power on
+        //this->sendMessageToDevice();
         this->memoryPower = true;
         this->setMemoryPowerText("Memory power is on", QColor(0,255,0));
         this->setLastOperationText("Power turned on");
@@ -184,6 +191,7 @@ void MainWindow::on_pushButtonPower_clicked()
     else
     {
         // send power off
+        //this->sendMessageToDevice();
         this->memoryPower = false;
         this->setMemoryPowerText("Memory power is off");
         this->setLastOperationText("Power turned off");
@@ -192,9 +200,9 @@ void MainWindow::on_pushButtonPower_clicked()
 
 void MainWindow::on_pushButtonWriteFull_clicked()
 {
-    qDebug() << "on_pushButtonWriteFull_clicked()";
     unsigned char value = 0x05;
-    this->setLastOperationText("Full memory write commanded");
+    this->setLastOperationText("Write full memory");
+    //this->sendMessageToDevice();
 }
 
 void MainWindow::on_pushButtonReadFull_clicked()
@@ -205,7 +213,8 @@ void MainWindow::on_pushButtonReadFull_clicked()
     this->savedAddress->append(addressByteL);
     this->savedAddress->append(addressByteM);
     this->savedAddress->append(addressByteH);
-    this->setLastOperationText("Full memory read commanded");
+    this->setLastOperationText("Read full memory");
+    //this->sendMessageToDevice();
 }
 
 
@@ -214,7 +223,8 @@ void MainWindow::on_pushButtonStatus_clicked()
 {
    this->memoryStatus = ui->comboBoxStatus->currentText();
    qDebug() << this->memoryStatus;
-   this->setLastOperationText("Memory status changed");
+   this->setLastOperationText("Memory status change");
+   //this->sendMessageToDevice();
 }
 
 void MainWindow::on_pushButtonAddress_clicked()
@@ -228,20 +238,24 @@ void MainWindow::on_pushButtonAddress_clicked()
     this->savedAddress->append(addressByteL);
     this->savedAddress->append(addressByteM);
     this->savedAddress->append(addressByteH);
-    this->setLastOperationText("Address to read/write set");
+    this->setLastOperationText("Address to read/write memory set");
+    //this->sendMessageToDevice();
 }
 
 void MainWindow::on_pushButtonWrite_clicked()
 {    
     unsigned char writeValue = ui->spinBoxWriteValue->value();
     qDebug() << QString::number(writeValue);
-    this->setLastOperationText("Memory write commanded");
+    this->setLastOperationText("Write memory to address");
+    //this->sendMessageToDevice();
 }
 
 void MainWindow::on_pushButtonRead_clicked()
 {
     unsigned char numberToRead = ui->spinBoxNumberToRead->value();
     qDebug() << QString::number(numberToRead);
-    this->setLastOperationText("Memory read commanded");
+    this->setLastOperationText("Read memory bytes starting from address");
+    //this->sendMessageToDevice();
 }
+
 

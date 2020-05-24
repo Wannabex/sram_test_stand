@@ -11,6 +11,23 @@
 
 #include "serialportreader.h"
 
+#define DISABLE "Disable"
+#define STANDBY "Standby"
+#define STATE_PARAM "-s"
+#define STATE_VALUE_ON "on"
+#define STATE_VALUE_OFF "off"
+
+#define READ "Read"
+#define ADDRESS_PARAM "-a"
+#define NO_BYTES_PARAM "-n"
+
+#define WRITE "Write"
+#define ADDRESS_PARAM "-a"
+#define DATA_PARAM "-d"
+
+#define END_FRAME "\r\n"
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -24,6 +41,7 @@ public:
     ~MainWindow();
 
     void addToLogs(QString message);
+    void addToFramesLog(QString frame);
 
     void setUartPowerText(QString text, QColor color=QColor(255,0,0));
     void setMemoryPowerText(QString text, QColor color=QColor(255,0,0));
@@ -54,6 +72,7 @@ private:
     QSerialPort *uartDevice;
     MySerialReader *serialReader;
     QThread *readingThread;
+    int receivedFrameNumber;
 
     bool uartStatus;
     bool memoryPower;

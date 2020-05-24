@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>947</width>
-    <height>677</height>
+    <height>674</height>
    </rect>
   </property>
   <property name="font">
@@ -100,9 +100,9 @@
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>10</y>
+      <y>30</y>
       <width>481</width>
-      <height>621</height>
+      <height>371</height>
      </rect>
     </property>
     <property name="font">
@@ -118,7 +118,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
+      <y>240</y>
       <width>441</width>
       <height>159</height>
      </rect>
@@ -129,7 +129,7 @@
      </font>
     </property>
     <property name="title">
-     <string>                                          Basic testing</string>
+     <string>                                              Basic testing</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="1" column="0" colspan="2">
@@ -195,9 +195,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>430</y>
+      <y>420</y>
       <width>441</width>
-      <height>201</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="font">
@@ -206,7 +206,7 @@
      </font>
     </property>
     <property name="title">
-     <string>                                     Advanced testing</string>
+     <string>                                          Advanced testing</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="12" column="0">
@@ -402,6 +402,9 @@
        <property name="minimum">
         <number>1</number>
        </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
       </widget>
      </item>
     </layout>
@@ -497,6 +500,42 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QTextEdit" name="textEditFrames">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>440</y>
+      <width>481</width>
+      <height>191</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>420</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Received frames</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>10</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Event log</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
