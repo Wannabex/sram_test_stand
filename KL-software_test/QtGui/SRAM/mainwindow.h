@@ -11,21 +11,17 @@
 
 #include "serialportreader.h"
 
-#define DISABLE "Disable"
-#define STANDBY "Standby"
-#define STATE_PARAM "-s"
-#define STATE_VALUE_ON "on"
-#define STATE_VALUE_OFF "off"
+#define STATE "state"
+#define STATE_STANDBY "-s"
+#define STATE_OUTPUT_DISABLE "-d"
+#define STATE_OPERATIONAL "-o"
 
-#define READ "Read"
-#define ADDRESS_PARAM "-a"
-#define NO_BYTES_PARAM "-n"
-
-#define WRITE "Write"
-#define ADDRESS_PARAM "-a"
-#define DATA_PARAM "-d"
+#define READ "read"
+#define WRITE "write"
 
 #define END_FRAME "\r\n"
+
+
 
 
 QT_BEGIN_NAMESPACE
@@ -41,7 +37,7 @@ public:
     ~MainWindow();
 
     void addToLogs(QString message);
-    void addToFramesLog(QString frame);
+    void addToFramesLog(QString frame, bool readwrite);
 
     void setUartPowerText(QString text, QColor color=QColor(255,0,0));
     void setMemoryPowerText(QString text, QColor color=QColor(255,0,0));
@@ -62,8 +58,7 @@ private slots:
     void on_pushButtonReadFull_clicked();
 
     //Advanced testing tab
-    void on_pushButtonStatus_clicked();
-    void on_pushButtonAddress_clicked();
+    void on_pushButtonStatus_clicked();    
     void on_pushButtonWrite_clicked();
     void on_pushButtonRead_clicked();
 
@@ -73,13 +68,16 @@ private:
     MySerialReader *serialReader;
     QThread *readingThread;
     int receivedFrameNumber;
+    int transmittedFrameNumber;
 
     bool uartStatus;
     bool memoryPower;
     QString memoryStatus;
-    QByteArray *savedAddress;
 
     void guiInitialize();
     void testStandInit();
+
+    QString getOperationAddress();
+    QString formatAsciiBytes(QString asciiBytes, int targetLength=0);
 };
 #endif // MAINWINDOW_H

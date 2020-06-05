@@ -16,9 +16,9 @@ void MySerialReader::readFromPort()
         QByteArray dataBuffer = this->readPort->readAll();
         if (dataBuffer.size() > 0)
         {
-            this->checkForFullFrame(dataBuffer);
+            emit dataToLogs(dataBuffer);
+            //this->checkForFullFrame(dataBuffer);
         }
-
         while(this->readPort->waitForReadyRead(50))// && this->readPort->canReadLine())
         {
         }

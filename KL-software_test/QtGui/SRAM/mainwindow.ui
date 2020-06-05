@@ -152,6 +152,9 @@
      </item>
      <item row="2" column="0" colspan="2">
       <widget class="QPushButton" name="pushButtonWriteFull">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="font">
         <font>
          <pointsize>9</pointsize>
@@ -164,6 +167,9 @@
      </item>
      <item row="3" column="0" colspan="2">
       <widget class="QPushButton" name="pushButtonReadFull">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="font">
         <font>
          <pointsize>9</pointsize>
@@ -176,6 +182,9 @@
      </item>
      <item row="0" column="0" colspan="2">
       <widget class="QPushButton" name="pushButtonPower">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="font">
         <font>
          <pointsize>9</pointsize>
@@ -196,8 +205,8 @@
      <rect>
       <x>10</x>
       <y>420</y>
-      <width>441</width>
-      <height>211</height>
+      <width>438</width>
+      <height>200</height>
      </rect>
     </property>
     <property name="font">
@@ -209,28 +218,6 @@
      <string>                                          Advanced testing</string>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="12" column="0">
-      <widget class="QLabel" name="labelOptions">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Additional options:</string>
-       </property>
-       <property name="buddy">
-        <cstring></cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QSpinBox" name="spinBoxAddress">
-       <property name="maximum">
-        <number>131072</number>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0" colspan="3">
       <spacer name="horizontalSpacer_4">
        <property name="font">
@@ -249,30 +236,18 @@
        </property>
       </spacer>
      </item>
-     <item row="4" column="2">
-      <widget class="QPushButton" name="pushButtonAddress">
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBoxStatus">
        <property name="font">
         <font>
          <pointsize>9</pointsize>
         </font>
        </property>
-       <property name="text">
-        <string>Set address</string>
+       <property name="currentText">
+        <string/>
        </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
-      <widget class="QPushButton" name="pushButtonWrite">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Write</string>
+       <property name="minimumContentsLength">
+        <number>0</number>
        </property>
       </widget>
      </item>
@@ -285,6 +260,21 @@
        </property>
        <property name="text">
         <string>Read/Write address:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButtonStatus">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Change status</string>
        </property>
       </widget>
      </item>
@@ -303,26 +293,7 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="2">
-      <widget class="QPushButton" name="pushButtonRead">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Read</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QSpinBox" name="spinBoxWriteValue">
-       <property name="maximum">
-        <number>255</number>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="labelRead">
        <property name="font">
         <font>
@@ -330,38 +301,11 @@
         </font>
        </property>
        <property name="text">
-        <string>Number of bytes to read:</string>
+        <string>Number of bytes to read/write:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButtonStatus">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Change status</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="comboBoxStatus">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="currentText">
-        <string/>
-       </property>
-       <property name="minimumContentsLength">
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
+     <item row="9" column="0">
       <widget class="QLabel" name="labelWrite">
        <property name="font">
         <font>
@@ -373,37 +317,69 @@
        </property>
       </widget>
      </item>
-     <item row="12" column="1">
-      <widget class="QCheckBox" name="checkBoxSomething">
-       <property name="font">
-        <font>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Something cool</string>
-       </property>
-      </widget>
-     </item>
      <item row="12" column="2">
-      <widget class="QCheckBox" name="checkBoxTime">
+      <widget class="QPushButton" name="pushButtonWrite">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="font">
         <font>
          <pointsize>9</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Measure time</string>
+        <string>Write</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
-      <widget class="QSpinBox" name="spinBoxNumberToRead">
+     <item row="4" column="2">
+      <widget class="QSpinBox" name="spinBoxAddress">
+       <property name="maximum">
+        <number>131071</number>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QSpinBox" name="spinBoxNumberToReadWrite">
        <property name="minimum">
         <number>1</number>
        </property>
        <property name="maximum">
         <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="2">
+      <widget class="QSpinBox" name="spinBoxWriteValue">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QPushButton" name="pushButtonRead">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Read</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="labelOperation">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Start operation:</string>
        </property>
       </widget>
      </item>
@@ -514,14 +490,14 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>640</x>
+      <x>590</x>
       <y>420</y>
-      <width>101</width>
+      <width>201</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Received frames</string>
+     <string>Transmitted and received frames</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
