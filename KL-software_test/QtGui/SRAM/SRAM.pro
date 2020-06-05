@@ -19,12 +19,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    serialportreader.cpp \
-    sramdataframe.cpp
+    serialportreader.cpp
 
 HEADERS += \
     mainwindow.h \
-    sramdataframe.h \
     serialportreader.h \
 
 FORMS += \

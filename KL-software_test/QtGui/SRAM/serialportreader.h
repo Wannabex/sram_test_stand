@@ -5,7 +5,6 @@
 #include <QSerialPortInfo>
 #include <QSerialPort>
 #include <QThread>
-#include "sramdataframe.h"
 
 class MySerialReader : public QObject
 {
@@ -13,21 +12,21 @@ class MySerialReader : public QObject
 public:
     MySerialReader(QSerialPort *device);
     void stopReader();
-    SramDataFrame *SramFrameRead;
 
+    QByteArray *sramFrameRead;
 public slots:
     void readFromPort();
 
 signals:
-    void dataToLogs(QString serialData);
-    void sendToZwave(char toSend);
-    void correctFrameRead(QByteArray frameBytes);
+    void dataToLogs(QString serialData);    
 
 private:
     bool running;    
-    bool awaitingResponse;
-    bool commandSentAgain;
     QSerialPort *readPort;
+    QByteArray *receivedFrame;
+
+    void checkForFullFrame(QByteArray dataRead);
+    QString frameToString(QByteArray receivedBytes);
 
 };
 
