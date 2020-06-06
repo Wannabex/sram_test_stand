@@ -1,0 +1,19 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [Free Documents]
+   Generated File[RAM.GTO]
+   Generated File[RAM.GTS]
+   Generated File[RAM.GTL]
+   Generated File[RAM.GBL]
+   Generated File[RAM.GBS]
+   Generated File[RAM.GBO]
+   Generated File[RAM.GM2]
+   Generated File[RAM.RUL]
+   Generated File[RAM.EXTREP]
+   Generated File[RAM.REP]
+
+
+Files Generated   : 10
+Documents Printed : 0
+
+Finished Output Generation At 19:20:57 On 15/04/2020
