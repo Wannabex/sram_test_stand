@@ -1,0 +1,5 @@
+commands.c:11:6:Bwrite	24	static
+commands.c:20:6:Bread	128	static
+commands.c:31:6:Write	32	static
+commands.c:46:6:Read	136	static
+commands.c:67:6:init_commands	8	static

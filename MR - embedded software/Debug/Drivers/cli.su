@@ -1,0 +1,6 @@
+cli.c:50:6:CLI_Proc	16	static
+cli.c:70:6:CLI_AddCommand	16	static
+cli.c:83:6:CLI_PrintAllCommands	16	static
+cli.c:94:18:CLI_GetMenuItemByCommandName	24	static
+cli.c:108:6:CLI_StringToLower	24	static
+cli.c:118:6:CLI_StoreCommand	16	static

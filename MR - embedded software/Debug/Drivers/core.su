@@ -1,0 +1,2 @@
+core.c:6:6:CORE_EnterCriticalSection	4	static,ignoring_inline_asm
+core.c:10:6:CORE_ExitCriticalSection	4	static,ignoring_inline_asm

@@ -1,0 +1,7 @@
+gpio.c:18:6:write_address	16	static
+gpio.c:24:6:write_data	16	static
+gpio.c:35:9:read_data	8	static
+gpio.c:46:6:write	16	static
+gpio.c:57:9:read	24	static
+gpio.c:70:6:bulk_write	32	static
+gpio.c:85:10:bulk_read	32	static
