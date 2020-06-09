@@ -18,8 +18,13 @@
 
 #define READ "read"
 #define WRITE "write"
+#define MAX_BYTES_TO_READWRITE 256 // 0 - 255; 256 - 511 etc.
 
 #define END_FRAME "\r\n"
+
+#define MEMORY_WORDS 131072
+#define WORD_BIT_SIZE 8
+
 
 
 

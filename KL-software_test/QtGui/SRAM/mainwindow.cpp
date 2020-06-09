@@ -111,6 +111,9 @@ void MainWindow::on_pushButtonConnect_clicked()
     this->setUartPowerText("Uart initialized", QColor(0,255,0));
     this->setMemoryPowerText("Memory operational", QColor(0,255,0));
     this->setLastOperationText("Test stand connected", QColor(0,0,0));
+
+    ui->pushButtonReadFull->setEnabled(true);
+    ui->pushButtonWriteFull->setEnabled(true);
     ui->pushButtonRead->setEnabled(true);
     ui->pushButtonWrite->setEnabled(true);
     ui->pushButtonDisconnect->setEnabled(true);
@@ -120,7 +123,9 @@ void MainWindow::dataFromReader(QString serialData)
 {
     QString logMessage = QString("Received data frame number " + QString::number(this->receivedFrameNumber));
     this->addToLogs(logMessage);
-    this->addToFramesLog(serialData, 1);
+    QString logsData = serialData;
+    logsData.chop(2); // remove \r\n at the end
+    this->addToFramesLog(logsData, 1);
 }
 
 void MainWindow::testStandInit()
@@ -169,15 +174,19 @@ void MainWindow::on_pushButtonDisconnect_clicked()
     this->uartStatus = false;
     ui->pushButtonDisconnect->setEnabled(false);
 
+    ui->pushButtonReadFull->setEnabled(false);
+    ui->pushButtonWriteFull->setEnabled(false);
     ui->pushButtonRead->setEnabled(false);
-    ui->pushButtonWrite->setEnabled(false);
+    ui->pushButtonWrite->setEnabled(false);    
 }
 
 void MainWindow::sendMessageToDevice(QByteArray messageBytes)
 {    
     if(this->uartDevice->isOpen() && this->uartDevice->isWritable())
     {
-        this->addToFramesLog(messageBytes, 0);
+        QByteArray logsMessage = messageBytes;
+        logsMessage.chop(2); // remove \r\n at the end
+        this->addToFramesLog(logsMessage, 0);
         this->uartDevice->write(messageBytes);
     }
     else
@@ -206,40 +215,68 @@ void MainWindow::on_pushButtonPower_clicked()
         this->setLastOperationText("Power switch off");
         this->addToLogs("Memory power switched off");
     }
-
 }
 
 void MainWindow::on_pushButtonWriteFull_clicked()
 {
-    unsigned char value = 0x05;
+    QByteArray messageFrame = QByteArray();
+    QString asciiBytes;
+    unsigned char byteValue = 0x55;
     this->setLastOperationText("Write full memory");
     this->addToLogs("Full memory write started");
-    //this->sendMessageToDevice();
+
+
+    int numberOfWrites = MEMORY_WORDS / MAX_BYTES_TO_READWRITE;
+
+    for (int writeOperaion = 0; writeOperaion < numberOfWrites; writeOperaion++)
+    {
+        messageFrame.append(WRITE);
+        messageFrame.append(" ");
+        int startingAddress = 0 + writeOperaion * MAX_BYTES_TO_READWRITE;
+        asciiBytes.setNum(startingAddress, 16);
+        messageFrame.append(this->formatAsciiBytes(asciiBytes, 5));
+        messageFrame.append(" ");
+        asciiBytes.setNum(MAX_BYTES_TO_READWRITE, 16);
+        messageFrame.append(" ");
+        for (int byteToWrite = 0; byteToWrite < MAX_BYTES_TO_READWRITE; byteToWrite++)
+        {
+            asciiBytes.setNum(byteValue, 16);
+            messageFrame.append(this->formatAsciiBytes(asciiBytes));
+            messageFrame.append(" ");            
+        }
+        messageFrame.append(END_FRAME);
+        this->sendMessageToDevice(messageFrame);
+        messageFrame.clear();
+    }
 }
 
 void MainWindow::on_pushButtonReadFull_clicked()
 {  
-    QByteArray messageFrame = QByteArray();
-    QByteArray operationAddress = QByteArray();
-    unsigned char addressByteL = 0xff;
-    unsigned char addressByteM = 0xff;
-    unsigned char addressByteH = 0x01;            
-    operationAddress.append(addressByteL);
-    operationAddress.append(addressByteM);
-    operationAddress.append(addressByteH);
-
-    messageFrame.append(READ);
-    messageFrame.append(operationAddress);
-    //messageFrame.append();
-
+    QByteArray messageFrame = QByteArray();   
+    QString asciiBytes;
 
     this->setLastOperationText("Read full memory");
     this->addToLogs("Full memory read started");
-    //this->sendMessageToDevice(messageFrame);
+    int numberOfReads = MEMORY_WORDS / MAX_BYTES_TO_READWRITE;
+
+    for (int readOperaion = 0; readOperaion < numberOfReads; readOperaion++)
+    {
+        messageFrame.append(READ);
+        messageFrame.append(" ");
+        int startingAddress = 0 + readOperaion * MAX_BYTES_TO_READWRITE;
+        asciiBytes.setNum(startingAddress, 16);
+        messageFrame.append(this->formatAsciiBytes(asciiBytes, 5));
+        messageFrame.append(" ");
+        asciiBytes.setNum(MAX_BYTES_TO_READWRITE, 16);
+        messageFrame.append(" ");
+        messageFrame.append(this->formatAsciiBytes(asciiBytes));
+        messageFrame.append(" ");
+        messageFrame.append(END_FRAME);
+        this->sendMessageToDevice(messageFrame);
+        messageFrame.clear();
+    }
 
 }
-
-
 
 void MainWindow::on_pushButtonStatus_clicked()
 {
@@ -281,13 +318,13 @@ void MainWindow::on_pushButtonWrite_clicked()
     asciiBytes.setNum(numberToWrite, 16);
     messageFrame.append(this->formatAsciiBytes(asciiBytes));
     messageFrame.append(" ");
-    for (int bytesToWrite = 0; bytesToWrite < numberToWrite; bytesToWrite++)
+    for (int byteToWrite = 0; byteToWrite < numberToWrite; byteToWrite++)
     {
         asciiBytes.setNum(writeValue, 16);
         messageFrame.append(this->formatAsciiBytes(asciiBytes));
         messageFrame.append(" ");
     }
-    //messageFrame.append(END_FRAME);
+    messageFrame.append(END_FRAME);
     this->sendMessageToDevice(messageFrame);
 }
 
@@ -306,7 +343,7 @@ void MainWindow::on_pushButtonRead_clicked()
     asciiBytes.setNum(numberToRead, 16);
     messageFrame.append(this->formatAsciiBytes(asciiBytes));
     messageFrame.append(" ");
-    //messageFrame.append(END_FRAME);
+    messageFrame.append(END_FRAME);
     this->sendMessageToDevice(messageFrame);
 }
 
